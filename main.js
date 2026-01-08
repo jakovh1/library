@@ -10,19 +10,44 @@ const modalOpener = document.getElementById('modal-opener');
 const modal = document.getElementById('modal');
 const closeButton = document.getElementById('close-button');
 
-function Book(title, author, pages, isRead = false) {
-  if (!new.target) {
-    return "Initialize new object with new keyword.";
-  }
-  this.id = crypto.randomUUID()
-  this.title = title;
-  this.author = author;
-  this.pages = pages;
-  this.isRead = isRead
-}
+class Book {
+  #id;
+  #title;
+  #author;
+  #pages;
+  #isRead;
 
-Book.prototype.toggleRead = function () {
-  this.isRead = !this.isRead;
+  constructor(title, author, pages, isRead = false) {
+    this.#id = crypto.randomUUID();
+    this.#title = title;
+    this.#author = author;
+    this.#pages = pages;
+    this.#isRead = isRead
+  }
+
+  toggleRead() { 
+    this.#isRead = !this.#isRead;
+  }
+
+  get id() {
+    return this.#id;
+  }
+
+  get title() {
+    return this.#title;
+  }
+
+  get author() {
+    return this.#author;
+  }
+
+  get pages() {
+    return this.#pages;
+  }
+
+  get isRead() {
+    return this.#isRead;
+  }
 }
 
 function addBookToLibrary(title, author, pages, isRead) {
