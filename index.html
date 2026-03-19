@@ -16,9 +16,9 @@
       <button class="close-btn" id="close-button">✖</button>
       <h2>Add a new book</h2>
       <form action="" id="book-addition-form">
-        <input type="text" id="title" placeholder="Book title"><br />
-        <input type="text" id="author" placeholder="Author"><br />
-        <input type="number" id="pages" placeholder="Number of pages" value=0><br />
+        <input type="text" id="title" placeholder="Book title" required><br />
+        <input type="text" id="author" placeholder="Author" required><br />
+        <input type="number" id="pages" placeholder="Number of pages" value=0 min="10"><br />
         <div>
           Has it been read? <br />
           <label for="yes"><input type="radio" name="read" id="yes" value="true"> Yes</label>
