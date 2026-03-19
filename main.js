@@ -1,14 +1,14 @@
 const myLibrary = [];
 
-const bookAdditionButton = document.getElementById('new-book');
-const bookTitle = document.getElementById('title');
-const bookAuthor = document.getElementById('author');
-const pages = document.getElementById('pages');
-const form = document.getElementById('book-addition-form');
-const bookShelf = document.getElementById('book-shelf');
-const modalOpener = document.getElementById('modal-opener');
-const modal = document.getElementById('modal');
-const closeButton = document.getElementById('close-button');
+const bookAdditionButton = document.getElementById("new-book");
+const bookTitle = document.getElementById("title");
+const bookAuthor = document.getElementById("author");
+const pages = document.getElementById("pages");
+const form = document.getElementById("book-addition-form");
+const bookShelf = document.getElementById("book-shelf");
+const modalOpener = document.getElementById("modal-opener");
+const modal = document.getElementById("modal");
+const closeButton = document.getElementById("close-button");
 
 class Book {
   #id;
@@ -22,10 +22,10 @@ class Book {
     this.#title = title;
     this.#author = author;
     this.#pages = pages;
-    this.#isRead = isRead
+    this.#isRead = isRead;
   }
 
-  toggleRead() { 
+  toggleRead() {
     this.#isRead = !this.#isRead;
   }
 
@@ -59,14 +59,13 @@ function addBookToLibrary(title, author, pages, isRead) {
   } else {
     return newBook;
   }
-  
 }
 
 function depictBook(book) {
   let container = document.createElement("div");
 
   container.classList.add("book-container");
-  container.setAttribute('data-book-id', book.id)
+  container.setAttribute("data-book-id", book.id);
 
   let newElement = document.createElement("p");
 
@@ -82,37 +81,34 @@ function depictBook(book) {
 function addReadToggle(container, book) {
   let button = document.createElement("button");
 
-  button.setAttribute('data-id', book.id);
-  button.classList.add('read-toggle');
+  button.setAttribute("data-id", book.id);
+  button.classList.add("read-toggle");
   button.innerText = book.isRead ? "Mark as Unread" : "Mark as Read";
   container.appendChild(button);
 
-  button.addEventListener('click', () => {
+  button.addEventListener("click", () => {
     book.toggleRead();
     displayBooks();
   });
 }
 
-
 function addRemoveButton(bookContainer, uuid) {
   let button = document.createElement("button");
 
-  button.setAttribute('data-id', uuid);
-  button.classList.add('remove-button');
+  button.setAttribute("data-id", uuid);
+  button.classList.add("remove-button");
   button.innerText = "Remove book";
   bookContainer.appendChild(button);
 
   button.addEventListener("click", () => {
-    removeBook(button.getAttribute('data-id'));
-  })
+    removeBook(button.getAttribute("data-id"));
+  });
 }
 
 function removeBook(uuid) {
   for (let book of myLibrary) {
-
     if (book.id == uuid) {
       let index = myLibrary.indexOf(book);
-      
 
       if (index !== -1) {
         myLibrary.splice(index, 1);
@@ -123,30 +119,65 @@ function removeBook(uuid) {
 }
 
 function displayBooks() {
-  
   bookShelf.innerHTML = "";
-  myLibrary.forEach(book => {
+  myLibrary.forEach((book) => {
     depictBook(book);
-  })
+  });
 }
 
-form.addEventListener('submit', (event) => {
+bookTitle.setCustomValidity("The book title must be filled.");
+bookAuthor.setCustomValidity("The book author must be filled.");
+
+bookTitle.addEventListener("change", () => {
+  if (bookTitle.value.length > 0) {
+    bookTitle.setCustomValidity("");
+  } else {
+    bookTitle.setCustomValidity("The book title must be filled.");
+  }
+});
+
+bookAuthor.addEventListener("change", () => {
+  if (bookAuthor.value.length > 0) {
+    bookAuthor.setCustomValidity("");
+  } else {
+    bookAuthor.setCustomValidity("The book author must be filled.");
+  }
+});
+
+pages.addEventListener("change", () => {
+  if (pages.validity.rangeUnderflow) {
+    pages.setCustomValidity("This should be more than 10.");
+  } else {
+    pages.setCustomValidity("");
+  }
+});
+
+form.addEventListener("submit", (event) => {
   event.preventDefault();
   let isRead = document.querySelector('input[name="read"]:checked');
-  if (bookTitle.value != "" && bookAuthor.value != "" && pages.value > 0) {
-    addBookToLibrary(bookTitle.value, bookAuthor.value, pages.value, Boolean(isRead.value));
-    modal.classList.remove('modal-active');
-  } else {
-    alert("Please fill the form.");
+
+  if (
+    bookTitle.checkValidity() &&
+    bookTitle.checkValidity() &&
+    !pages.validity.rangeUnderflow
+  ) {
+    pages.setCustomValidity("");
+    addBookToLibrary(
+      bookTitle.value,
+      bookAuthor.value,
+      pages.value,
+      Boolean(isRead.value),
+    );
+    modal.classList.remove("modal-active");
+
+    form.reset();
   }
+});
 
-  form.reset();
-})
+modalOpener.addEventListener("click", () => {
+  modal.classList.add("modal-active");
+});
 
-modalOpener.addEventListener('click', () => {
-  modal.classList.add('modal-active');
-})
-
-closeButton.addEventListener('click', () => {
-  modal.classList.remove('modal-active');
-})
+closeButton.addEventListener("click", () => {
+  modal.classList.remove("modal-active");
+});
